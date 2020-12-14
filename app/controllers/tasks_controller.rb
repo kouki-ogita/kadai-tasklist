@@ -1,4 +1,5 @@
 class TasksController < ApplicationController
+  before_action :require_user_logged_in, only: [:index, :show]
   before_action :set_task, only: [:show, :edit, :update, :destroy]
   
   def index
@@ -28,7 +29,7 @@ class TasksController < ApplicationController
   end
 
   def update
-    if @task.update(message_params)
+    if @task.update(task_params)
       flash[:success] = 'Task は正常に更新されました'
       redirect_to @task
     else
@@ -41,12 +42,12 @@ class TasksController < ApplicationController
     @task.destroy
 
     flash[:success] = 'Task は正常に削除されました'
-    redirect_to messages_url
+    redirect_to tasks_url
   end
   
   private
 
-  def set_message
+  def set_task
     @task = Task.find(params[:id])
   end 
   
